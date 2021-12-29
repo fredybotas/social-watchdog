@@ -129,7 +129,7 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "lib-core"
+name = "libcore"
 version = "0.1.0"
 description = ""
 category = "main"
@@ -142,7 +142,7 @@ pymongo = "^4.0.1"
 
 [package.source]
 type = "directory"
-url = "lib/lib-core"
+url = "lib/libcore"
 
 [[package]]
 name = "mccabe"
@@ -344,7 +344,7 @@ python-versions = "^3.10"
 develop = true
 
 [package.dependencies]
-lib-core = {path = "../../lib/lib-core", develop = true}
+libcore = {path = "../../lib/libcore", develop = true}
 python-dotenv = "^0.19.2"
 python-telegram-bot = "^13.9"
 
@@ -454,7 +454,7 @@ iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
-lib-core = []
+libcore = []
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},

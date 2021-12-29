@@ -1,5 +1,5 @@
-from lib_core.repositories import WatchableRepository
-from lib_core.types import Watchable
+from libcore.repositories import WatchableRepository
+from libcore.types import Watchable
 
 from pymongo import MongoClient
 import uuid

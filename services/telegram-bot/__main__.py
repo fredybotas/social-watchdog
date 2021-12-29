@@ -1,5 +1,5 @@
-from lib_core.repositories import WatchableRepository
-from lib_core.services import WatchableService, WatchableLimiter
+from libcore.repositories import WatchableRepository
+from libcore.services import WatchableService, WatchableLimiter
 from pymongo.mongo_client import MongoClient
 from telegram_bot import Bot
 from dotenv import load_dotenv

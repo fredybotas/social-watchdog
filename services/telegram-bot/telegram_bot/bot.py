@@ -1,9 +1,9 @@
-from lib_core.services import LimitExceededError, NotFoundError
+from libcore.services import LimitExceededError, NotFoundError
 from telegram.ext import Updater
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 import os
-from lib_core.services import WatchableService
+from libcore.services import WatchableService
 
 
 class BotHandler:

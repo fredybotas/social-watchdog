@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "lib-core"
+name = "libcore"
 version = "0.1.0"
 description = ""
 authors = ["Michal Manak <fredybotas@gmail.com>"]

@@ -1,5 +1,5 @@
-from lib_core.repositories import WatchableRepository
-from lib_core.types.watchable import Watchable
+from libcore.repositories import WatchableRepository
+from libcore.types import Watchable
 import uuid
 from typing import List
 

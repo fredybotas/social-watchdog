@@ -1,6 +1,5 @@
-from lib_core.services import WatchableLimiter
+from libcore.services import WatchableLimiter
 from unittest.mock import MagicMock
-from lib_core.types import Watchable
 import pytest
 
 
