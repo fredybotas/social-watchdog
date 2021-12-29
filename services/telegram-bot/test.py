@@ -7,7 +7,6 @@ import uuid
 db_string = "mongodb://watchdog:watchdog@localhost:27017/"
 client = MongoClient(db_string)
 repo = WatchableRepository(client)
-print(WatchableRepository.__mro__)
 watchable = Watchable(id=uuid.uuid4(), subreddit="aaaa", watch="sss")
 repo.insert_one(watchable)
-print(repo.get_one(id=watchable.id))
+print(repo.get_all({"id": watchable.id, "subreddit": "aaaa"}))

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 import bson
-from typing import Generic, TypeVar, Optional, Dict
+from typing import Generic, TypeVar, Optional, Dict, List
 from pymongo import MongoClient
+import copy
+from uuid import UUID
 
 T = TypeVar("T")
 DATABASE_NAME = "reddit_watchdog"
@@ -9,7 +11,11 @@ DATABASE_NAME = "reddit_watchdog"
 
 class IGenericRepository(ABC, Generic[T]):
     @abstractmethod
-    def get_one(self, id: str) -> Optional[T]:
+    def get_one(self, filter: Dict[str, any]) -> Optional[T]:
+        pass
+
+    @abstractmethod
+    def get_all(self, filter: Dict[str, any]) -> List[T]:
         pass
 
     @abstractmethod
@@ -31,23 +37,39 @@ class GenericMongoRepository(IGenericRepository):
         self.table_name = table_name
         self.handle = client.get_database(DATABASE_NAME).get_collection(table_name)
 
-    def _serialize(self, element: T) -> Dict:
-        pass
+    @staticmethod
+    def _prepare_filter(filter: Dict[str, any]) -> Dict[str, any]:
+        altered_filter = copy.deepcopy(filter)
+        if "id" in filter:
+            altered_filter["_id"] = bson.Binary.from_uuid(UUID(filter["id"]))
+            altered_filter.pop("id")
+        return altered_filter
+
+    def _serialize(self, element: T) -> Dict[str, any]:
+        raise NotImplementedError()
 
     def _deserialize(self, raw_data: Dict[str, any]) -> T:
-        pass
+        raise NotImplementedError()
 
-    def get_one(self, id: str) -> Optional[T]:
-        result = self.handle.find_one(bson.Binary.from_uuid(id))
+    def get_one(self, filter: Dict[str, any]) -> Optional[T]:
+        result = self.handle.find_one(GenericMongoRepository._prepare_filter(filter))
         if result is None:
             return result
         return self._deserialize(result)
+
+    def get_all(self, filter: Dict[str, any]) -> List[T]:
+        return [
+            self._deserialize(element)
+            for element in self.handle.find(
+                GenericMongoRepository._prepare_filter(filter)
+            )
+        ]
 
     def insert_one(self, value: T) -> None:
         self.handle.insert_one(self._serialize(value))
 
     def remove(self, id: str) -> None:
-        self.handle.delete_one({"_id": bson.Binary.from_uuid(id)})
+        self.handle.delete_one({"_id": bson.Binary.from_uuid(UUID(id))})
 
     def update_one(self, value: T) -> Optional[T]:
         self.handle.replace_one(
