@@ -1,4 +1,4 @@
-from bot import Bot
+from telegram_bot import Bot
 from dotenv import load_dotenv
 
 if __name__ == "__main__":

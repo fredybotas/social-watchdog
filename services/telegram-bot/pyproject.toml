@@ -8,6 +8,7 @@ authors = ["Michal Manak <fredybotas@gmail.com>"]
 python = "^3.10"
 python-telegram-bot = "^13.9"
 python-dotenv = "^0.19.2"
+lib-core = { path = "../../lib/lib-core", develop = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

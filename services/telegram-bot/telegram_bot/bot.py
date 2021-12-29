@@ -2,11 +2,13 @@ from telegram.ext import Updater
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 import os
+from lib_core.services import WatchableService
 
 
 class BotHandler:
     def __init__(self) -> None:
         self.updater = Updater(os.getenv("TELEGRAM_API_KEY"))
+        self.service = WatchableService()
         self._add_handlers()
 
     def _add_handlers(self) -> None:
@@ -28,7 +30,7 @@ class BotHandler:
 
 class Bot:
     def __init__(self) -> None:
-        self.handler = BotHandler(self.updater)
+        self.handler = BotHandler()
 
     def run(self) -> None:
         self.handler.run()
