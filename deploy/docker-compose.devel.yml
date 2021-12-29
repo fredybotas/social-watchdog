@@ -1,0 +1,26 @@
+version: "3.9" 
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: watchdog
+      MONGO_INITDB_ROOT_PASSWORD: watchdog
+    networks:
+      - db-network
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    networks:
+      - db-network
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: watchdog
+      ME_CONFIG_MONGODB_ADMINPASSWORD: watchdog
+      ME_CONFIG_MONGODB_URL: mongodb://watchdog:watchdog@mongo:27017/
+networks:
+  db-network:
