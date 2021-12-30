@@ -95,6 +95,19 @@ type = "directory"
 url = "../../lib/libcore"
 
 [[package]]
+name = "liblog"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.10"
+develop = true
+
+[package.source]
+type = "directory"
+url = "../../lib/liblog"
+
+[[package]]
 name = "packaging"
 version = "21.3"
 description = "Core utilities for Python packages"
@@ -275,7 +288,7 @@ test = ["pytest-mock (>=3.3)", "pytest (>=4.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "64960d2b0d3ce3830dc33c9f7a7deef809d128ea688b27d41f7565e70dfb0b40"
+content-hash = "45566c03adfd6790ec89f4a9feb7c4b8f052ac4b35da57b6b87941f2ac25db86"
 
 [metadata.files]
 apscheduler = [
@@ -307,6 +320,7 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 libcore = []
+liblog = []
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},

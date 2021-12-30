@@ -1,15 +1,11 @@
 [tool.poetry]
-name = "telegram-bot"
+name = "liblog"
 version = "0.1.0"
 description = ""
 authors = ["Michal Manak <fredybotas@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-python-telegram-bot = "^13.9"
-python-dotenv = "^0.19.2"
-libcore = { path = "../../lib/libcore", develop = true }
-liblog = { path = "../../lib/liblog", develop = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

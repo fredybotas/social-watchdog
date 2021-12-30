@@ -1,9 +1,12 @@
-from libcore.services import LimitExceededError, NotFoundError
+from libcore.services import LimitExceededError, NotFoundError, WatchableService
+from liblog import get_logger
 from telegram.ext import Updater
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 import os
-from libcore.services import WatchableService
+
+
+logger = get_logger(__name__)
 
 
 class BotHandler:
@@ -37,7 +40,8 @@ class BotHandler:
             update.message.reply_text(
                 "Your watchlist:\n{}".format("\n".join(watchables)),
             )
-        except Exception:
+        except Exception as e:
+            logger.error(e)
             update.message.reply_text("Error occured. Please try again")
 
     def _remove_command(self, update: Update, context: CallbackContext):
@@ -51,7 +55,7 @@ class BotHandler:
                 "Watchable was not found! Please provide correct id"
             )
         except Exception as e:
-            print(e)
+            logger.error(e)
             update.message.reply_text("Error occured. Please try again")
 
     def _add_command(self, update: Update, context: CallbackContext):
@@ -65,11 +69,13 @@ class BotHandler:
                 watch=watch,
             )
             update.message.reply_text("Watchable sucessfully added!")
+            logger.info("User added watchable")
         except LimitExceededError:
             update.message.reply_text(
                 """You have exceeded limit for your watchables.\nPlease buy premium or remove some current watchables."""
             )
-        except Exception:
+        except Exception as e:
+            logger.error(e)
             update.message.reply_text("Error occured. Please try again")
 
     def run(self) -> None:

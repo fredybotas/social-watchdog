@@ -145,6 +145,19 @@ type = "directory"
 url = "lib/libcore"
 
 [[package]]
+name = "liblog"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.10"
+develop = true
+
+[package.source]
+type = "directory"
+url = "lib/liblog"
+
+[[package]]
 name = "mccabe"
 version = "0.6.1"
 description = "McCabe checker, plugin for flake8"
@@ -345,6 +358,7 @@ develop = true
 
 [package.dependencies]
 libcore = {path = "../../lib/libcore", develop = true}
+liblog = {path = "../../lib/liblog", develop = true}
 python-dotenv = "^0.19.2"
 python-telegram-bot = "^13.9"
 
@@ -411,7 +425,7 @@ test = ["pytest-mock (>=3.3)", "pytest (>=4.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "5edf01340ebde57411889f9c49c06cd13b42273b36c4bd304c444f2b96c05e35"
+content-hash = "f88813e6f5538991ebc90b90d0663f0caab294d73640ce103f065131480b1820"
 
 [metadata.files]
 apscheduler = [
@@ -455,6 +469,7 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 libcore = []
+liblog = []
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},

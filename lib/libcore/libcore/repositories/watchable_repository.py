@@ -1,6 +1,6 @@
 from typing import Dict
 from .generic_repository import GenericMongoRepository, IGenericRepository
-from ..types import Watchable
+from libcore.types import Watchable
 from pymongo import MongoClient
 import bson
 
