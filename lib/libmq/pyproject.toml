@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "libcore"
+name = "libmq"
 version = "0.1.0"
 description = ""
 authors = ["Michal Manak <fredybotas@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pymongo = "^4.0.1"
-schedule = "^1.1.0"
-praw = "^7.5.0"
+redis = "^4.1.0"
+liblog = { path = "../liblog", develop = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

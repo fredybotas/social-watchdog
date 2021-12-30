@@ -7,7 +7,9 @@ authors = ["Michal Manak <fredybotas@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 telegram-bot = { path = "./services/telegram-bot", develop = true }
+search-service = { path = "./services/search-service", develop = true }
 libcore = { path = "./lib/libcore", develop = true }
+libmq = { path = "./lib/libmq", develop = true}
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
