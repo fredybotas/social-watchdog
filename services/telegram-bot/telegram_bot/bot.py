@@ -61,7 +61,7 @@ class BotHandler:
     def _add_command(self, update: Update, context: CallbackContext):
         try:
             subreddit = update.message.text.split(" ")[1]
-            watch = update.message.text.split(" ")[2]
+            watch = " ".join(update.message.text.split(" ")[2:])
             self.watchable_service.add_watchable(
                 provider_user_id=update.message.from_user.id,
                 effective_chat_id=update.effective_chat.id,

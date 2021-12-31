@@ -43,7 +43,7 @@ class WatchableService:
         if self.limiter.should_allow_create(provider_user_id=provider_user_id) is False:
             raise LimitExceededError()
         watchable = Watchable(
-            id=uuid.uuid4(),
+            id=str(uuid.uuid4()),
             provider_user_id=provider_user_id,
             effective_chat_id=effective_chat_id,
             subreddit=subreddit,

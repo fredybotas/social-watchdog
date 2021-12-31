@@ -11,17 +11,15 @@ logger = get_logger(__name__)
 T = TypeVar("T")
 
 
+WATCHABLE_NOTIFICATION_QUEUE_KEY = "watchable_notification_queue"
+
+
 class UniqueMessageQueueClient(Generic[T]):
-    def __init__(
-        self,
-        queue_key: str,
-        host: str = os.getenv("REDIS_HOST"),
-        port: int = os.getenv("REDIS_PORT"),
-    ) -> None:
+    def __init__(self, queue_key: str) -> None:
         self.queue_key = queue_key
         self.set_key = queue_key + "_set"
-        self.host = host
-        self.port = port
+        self.host = os.getenv("REDIS_HOST")
+        self.port = os.getenv("REDIS_PORT")
         self.listening = False
         self._reconnect()
 

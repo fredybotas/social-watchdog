@@ -1,5 +1,7 @@
 from libcore.workers import RedditSearchWorker
 from libcore.repositories import WatchableRepository
+from libcore.types import WatchableNotification
+from libmq import UniqueMessageQueueClient, WATCHABLE_NOTIFICATION_QUEUE_KEY
 from pymongo.mongo_client import MongoClient
 from dotenv import load_dotenv
 import os
@@ -15,7 +17,11 @@ praw_client = praw.Reddit(
 )
 client = MongoClient(os.getenv("DB_URL"))
 repository = WatchableRepository(client)
-worker = RedditSearchWorker(5, praw_client, repository)
+mq_client = UniqueMessageQueueClient[WatchableNotification](
+    WATCHABLE_NOTIFICATION_QUEUE_KEY
+)
+
+worker = RedditSearchWorker(5, praw_client, repository, mq_client)
 
 if __name__ == "__main__":
     worker.start()

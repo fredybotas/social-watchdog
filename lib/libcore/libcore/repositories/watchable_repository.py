@@ -3,6 +3,7 @@ from .generic_repository import GenericMongoRepository, IGenericRepository
 from libcore.types import Watchable
 from pymongo import MongoClient
 import bson
+from uuid import UUID
 
 
 class IWatchableRepository(IGenericRepository):
@@ -17,7 +18,7 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
 
     def _serialize(self, element: Watchable) -> Dict[str, any]:
         return {
-            "_id": bson.Binary.from_uuid(element.id),
+            "_id": bson.Binary.from_uuid(UUID(element.id)),
             "provider_user_id": element.provider_user_id,
             "effective_chat_id": element.effective_chat_id,
             "subreddit": element.subreddit,
@@ -26,7 +27,7 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
 
     def _deserialize(self, raw_data: Dict[str, any]) -> Watchable:
         return Watchable(
-            id=raw_data["_id"].as_uuid(),
+            id=str(raw_data["_id"].as_uuid()),
             provider_user_id=raw_data["provider_user_id"],
             effective_chat_id=raw_data["effective_chat_id"],
             subreddit=raw_data["subreddit"],
