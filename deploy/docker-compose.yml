@@ -1,0 +1,30 @@
+version: "3.9" 
+
+services:
+  telegram-bot:
+    image: ghcr.io/fredybotas/telegram-bot:latest
+    restart: always
+    networks:
+      - internal-network
+    env_file:
+      - .env
+  search-service:
+    image: ghcr.io/fredybotas/search-service:latest
+    restart: always
+    networks:
+      - internal-network
+    env_file:
+      - .env
+  redis:
+    image: redis:6.2
+    restart: always
+    networks:
+      - internal-network
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+    external: false
+networks:
+  internal-network:

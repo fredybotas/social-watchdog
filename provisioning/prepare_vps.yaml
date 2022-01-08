@@ -4,6 +4,7 @@
   become: true
   vars_files:
     - vars/default.yml
+  user: root
 
   tasks:
     - name: Install Prerequisites
@@ -37,12 +38,27 @@
         state: present
         key: "{{ copy_local_key }}"
 
-    - name: Disable password authentication for root
-      lineinfile:
-        path: /etc/ssh/sshd_config
+    - name: Generate an OpenSSH keypair for Github
+      community.crypto.openssh_keypair:
+        path: /home/{{ create_user }}/.ssh/id_rsa_github
+
+    - name: Echo SSH pub key
+      command: cat /home/{{ create_user }}/.ssh/id_rsa_github.pub
+      register: ssh_output_pub
+
+    - name: Set github authorized key
+      authorized_key:
+        user: "{{ create_user }}"
         state: present
-        regexp: "^#?PermitRootLogin"
-        line: "PermitRootLogin prohibit-password"
+        key: "{{ ssh_output_pub.stdout }}"
+
+    - name: Display SSH key
+      command: cat /home/{{ create_user }}/.ssh/id_rsa_github | tr "\n" ""
+      register: ssh_output_private
+
+    - name: Print key to console
+      debug:
+        msg: "{{ssh_output_private.stdout}}"
 
     - name: Update apt
       apt: update_cache=yes

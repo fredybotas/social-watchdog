@@ -30,7 +30,3 @@ class RedditSearchWorker(PeriodicWorkerBase):
                 watchable_id=watchable.id, title=submission.title, url=submission.url
             )
             self.mq_client.enqueue(notification, submission.id)
-            print("-----")
-            print(submission.title)
-            print(submission.name)
-            print(submission.id)

@@ -8,12 +8,15 @@ authors = ["Michal Manak <fredybotas@gmail.com>"]
 python = "^3.10"
 python-telegram-bot = "^13.9"
 python-dotenv = "^0.19.2"
-libcore = { path = "../../lib/libcore", develop = true }
-liblog = { path = "../../lib/liblog", develop = true }
-libmq = { path = "../../lib/libmq", develop = true }
+libcore = ""
+liblog = ""
+libmq = ""
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+libcore = { path = "../../lib/libcore", develop = true }
+liblog = { path = "../../lib/liblog", develop = true }
+libmq = { path = "../../lib/libmq", develop = true }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

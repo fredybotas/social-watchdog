@@ -6,7 +6,7 @@ import copy
 from uuid import UUID
 
 T = TypeVar("T")
-DATABASE_NAME = "reddit_watchdog"
+DATABASE_NAME = "social_watchdog"
 
 
 class IGenericRepository(ABC, Generic[T]):

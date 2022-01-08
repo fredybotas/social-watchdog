@@ -9,6 +9,7 @@ import praw
 
 load_dotenv(dotenv_path="../../.env")
 
+
 praw_client = praw.Reddit(
     client_id=os.getenv("REDDIT_CLIENT_ID"),
     client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
@@ -21,7 +22,7 @@ mq_client = UniqueMessageQueueClient[WatchableNotification](
     WATCHABLE_NOTIFICATION_QUEUE_KEY
 )
 
-worker = RedditSearchWorker(5, praw_client, repository, mq_client)
+worker = RedditSearchWorker(60 * 60, praw_client, repository, mq_client)
 
 if __name__ == "__main__":
     worker.start()

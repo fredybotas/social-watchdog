@@ -10,6 +10,7 @@ telegram-bot = { path = "./services/telegram-bot", develop = true }
 search-service = { path = "./services/search-service", develop = true }
 libcore = { path = "./lib/libcore", develop = true }
 libmq = { path = "./lib/libmq", develop = true}
+liblog = { path = "./lib/liblog", develop = true}
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"

@@ -1,0 +1,83 @@
+name: Dockerize
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-packages:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.0]
+        poetry-version: [1.1.12]
+        os: [ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Build libcore
+        run: cd lib/libcore && poetry install --no-dev && poetry build
+      - name: Build liblog
+        run: cd lib/liblog && poetry install --no-dev && poetry build
+      - name: Build libmq
+        run: cd lib/libmq && poetry install --no-dev && poetry build
+      - name: Build telegram-bot
+        run: cd services/telegram-bot && poetry install --no-dev && poetry build
+      - name: Build search-service
+        run: cd services/search-service && poetry install --no-dev && poetry build
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+      - name: Push to telegram-bot package
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/${{ github.actor }}/telegram-bot:latest
+          file: services/telegram-bot/Dockerfile
+          push: true
+      - name: Push to search-service package
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/${{ github.actor }}/search-service:latest
+          file: services/search-service/Dockerfile
+          push: true
+  deploy:
+    needs: build-packages
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Push docker-compose to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy/docker-compose.yml"
+          target: "."
+      - uses: appleboy/ssh-action@master
+        name: Deploy
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.repository }} --password-stdin
+            cd deploy
+            sudo docker-compose stop
+            sudo docker-compose rm -f
+            sudo docker-compose pull
+            sudo docker-compose up -d
