@@ -23,7 +23,7 @@ class NotificationReceiver:
         if watchable is not None:
             self.bot.send_message(
                 watchable.effective_chat_id,
-                text="New match:\ntitle: {}\nurl: {})".format(
+                text="New match:\ntitle: {}\nurl: {}".format(
                     notification.title, notification.url
                 ),
             )
