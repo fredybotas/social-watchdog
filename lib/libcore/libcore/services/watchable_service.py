@@ -2,8 +2,9 @@ from libcore.repositories import WatchableRepository
 from libcore.types import Watchable
 import uuid
 from typing import List
+from datetime import datetime, timezone
 
-MAX_WATCHABLE_COUNT_PER_USER = 5
+MAX_WATCHABLE_COUNT_PER_USER = 10
 
 
 class WatchableLimiter:
@@ -48,6 +49,7 @@ class WatchableService:
             effective_chat_id=effective_chat_id,
             subreddit=subreddit,
             watch=watch,
+            created_at=datetime.now(tz=timezone.utc),
         )
         self.repository.insert_one(watchable)
 

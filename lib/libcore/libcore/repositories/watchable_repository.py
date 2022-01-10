@@ -23,6 +23,7 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
             "effective_chat_id": element.effective_chat_id,
             "subreddit": element.subreddit,
             "watch": element.watch,
+            "created_at": element.created_at,
         }
 
     def _deserialize(self, raw_data: Dict[str, any]) -> Watchable:
@@ -32,4 +33,5 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
             effective_chat_id=raw_data["effective_chat_id"],
             subreddit=raw_data["subreddit"],
             watch=raw_data["watch"],
+            created_at=raw_data["created_at"],
         )
