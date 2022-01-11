@@ -29,6 +29,10 @@ class RedditSearchWorker(PeriodicWorkerBase):
             except Exception:
                 logger.error("Couldn't process watchable: {}".format(watchable))
 
+    @staticmethod
+    def get_notification_hash(submission_id: str, user_id: str) -> str:
+        return submission_id + user_id
+
     def _process_watchable(self, watchable: Watchable):
         for submission in self.praw_client.subreddit(watchable.subreddit).search(
             watchable.watch, sort="new"
@@ -41,4 +45,9 @@ class RedditSearchWorker(PeriodicWorkerBase):
                 title=submission.title,
                 url=submission.shortlink,
             )
-            self.mq_client.enqueue(notification, submission.id)
+            self.mq_client.enqueue(
+                notification,
+                RedditSearchWorker.get_notification_hash(
+                    submission.id, watchable.provider_user_id
+                ),
+            )
