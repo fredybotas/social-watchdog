@@ -25,7 +25,6 @@ class UniqueMessageQueueClient(Generic[T]):
 
     def _reconnect(self):
         self.redis = redis.Redis(host=self.host, port=self.port, db=0)
-        self.redis.expire(self.set_key, 60 * 60 * 24)
 
     def enqueue(self, element: T, unique_identifier: str):
         try:
