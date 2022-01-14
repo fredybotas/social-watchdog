@@ -1,4 +1,5 @@
-from libcore.services import LimitExceededError, NotFoundError, WatchableService
+from .watchable_service import LimitExceededError, NotFoundError, WatchableService
+from telegram_bot.watchable_service import InvalidProcessingTypeError
 from liblog import get_logger
 from telegram.ext import Updater
 from telegram import Update
@@ -36,7 +37,10 @@ class BotHandler:
             watchables = self.watchable_service.get_all_watchables_for_user(
                 update.effective_user.id
             )
-            watchables = [str((str(w.id), w.subreddit, w.watch)) for w in watchables]
+            watchables = [
+                str((str(w.id), w.subreddit, w.processor_type.value, w.watch))
+                for w in watchables
+            ]
             update.message.reply_text(
                 "Your watchlist:\n{}".format("\n".join(watchables)),
             )
@@ -61,11 +65,13 @@ class BotHandler:
     def _add_command(self, update: Update, context: CallbackContext):
         try:
             subreddit = update.message.text.split(" ")[1]
-            watch = " ".join(update.message.text.split(" ")[2:])
+            processing_type = update.message.text.split(" ")[2]
+            watch = " ".join(update.message.text.split(" ")[3:])
             self.watchable_service.add_watchable(
                 provider_user_id=update.message.from_user.id,
                 effective_chat_id=update.effective_chat.id,
                 subreddit=subreddit,
+                processing_type=processing_type,
                 watch=watch,
             )
             update.message.reply_text("Watchable sucessfully added!")
@@ -74,6 +80,8 @@ class BotHandler:
             update.message.reply_text(
                 """You have exceeded limit for your watchables.\nPlease buy premium or remove some current watchables."""
             )
+        except InvalidProcessingTypeError:
+            update.message.reply_text("""Invalid processing type.""")
         except Exception as e:
             logger.error(e)
             update.message.reply_text("Error occured. Please try again")

@@ -1,4 +1,4 @@
-from libcore.workers import RedditSearchWorker
+from search_service import RedditSearchWorker
 from libcore.repositories import WatchableRepository
 from libcore.types import WatchableNotification
 from libmq import UniqueMessageQueueClient, WATCHABLE_NOTIFICATION_QUEUE_KEY
@@ -22,7 +22,7 @@ mq_client = UniqueMessageQueueClient[WatchableNotification](
     WATCHABLE_NOTIFICATION_QUEUE_KEY
 )
 
-worker = RedditSearchWorker(60 * 60, praw_client, repository, mq_client)
+worker = RedditSearchWorker(30 * 60, praw_client, repository, mq_client)
 
 if __name__ == "__main__":
     worker.start()

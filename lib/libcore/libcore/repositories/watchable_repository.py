@@ -1,6 +1,6 @@
 from typing import Dict
 from .generic_repository import GenericMongoRepository, IGenericRepository
-from libcore.types import Watchable
+from libcore.types import Watchable, WatchableProcessorType
 from pymongo import MongoClient
 import bson
 from uuid import UUID
@@ -23,6 +23,7 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
             "effective_chat_id": element.effective_chat_id,
             "subreddit": element.subreddit,
             "watch": element.watch,
+            "processor_type": element.processor_type.value,
             "created_at": element.created_at,
         }
 
@@ -33,5 +34,6 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
             effective_chat_id=raw_data["effective_chat_id"],
             subreddit=raw_data["subreddit"],
             watch=raw_data["watch"],
+            processor_type=WatchableProcessorType(raw_data["processor_type"]),
             created_at=raw_data["created_at"],
         )

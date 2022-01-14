@@ -1,4 +1,4 @@
-__all__ = ["Watchable", "WatchableNotification"]
-
-from .watchable import Watchable
+from .watchable import Watchable, WatchableProcessorType
 from .watchable_notification import WatchableNotification
+
+__all__ = ["Watchable", "WatchableNotification", "WatchableProcessorType"]

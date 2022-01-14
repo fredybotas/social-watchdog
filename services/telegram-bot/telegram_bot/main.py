@@ -1,5 +1,6 @@
+from telegram_bot import WatchableService, WatchableLimiter
+
 from libcore.repositories import WatchableRepository
-from libcore.services import WatchableService, WatchableLimiter
 from libmq import UniqueMessageQueueClient, WATCHABLE_NOTIFICATION_QUEUE_KEY
 from pymongo.mongo_client import MongoClient
 from telegram_bot import Bot

@@ -1,4 +1,4 @@
-from libcore.services import WatchableLimiter
+from telegram_bot import WatchableLimiter
 from unittest.mock import MagicMock
 import pytest
 

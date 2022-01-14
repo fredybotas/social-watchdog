@@ -7,5 +7,6 @@ RUN pip install *.whl && rm -rf *.whl
 
 COPY services/search-service/dist/*.whl ./
 RUN pip install *.whl && rm -rf *.whl
+RUN python -m spacy download en_core_web_sm
 
 CMD ["python", "-m", "search_service.main"]

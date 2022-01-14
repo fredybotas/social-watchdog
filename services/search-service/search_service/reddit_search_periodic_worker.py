@@ -1,10 +1,12 @@
-from .periodic_worker import PeriodicWorkerBase
 from libcore.repositories import WatchableRepository
 from libcore.types import Watchable, WatchableNotification
 from libmq import UniqueMessageQueueClient
-import praw
-from datetime import datetime
 from liblog import get_logger
+from search_service import WatchableProcessor
+from search_service.text_matchers import DefaultMatcher, StrictMatcher
+from .periodic_worker import PeriodicWorkerBase
+
+import praw
 
 logger = get_logger(__name__)
 
@@ -21,13 +23,18 @@ class RedditSearchWorker(PeriodicWorkerBase):
         self.repository = repository
         self.praw_client = praw_client
         self.mq_client = mq_client
+        self.watchable_processor = WatchableProcessor(
+            strict_matcher=StrictMatcher(), default_matcher=DefaultMatcher()
+        )
 
     def work(self):
         for watchable in self.repository.get_all({}):
             try:
                 self._process_watchable(watchable)
-            except Exception:
-                logger.error("Couldn't process watchable: {}".format(watchable))
+            except Exception as e:
+                logger.error(
+                    "Couldn't process watchable: {}, error: {}".format(watchable, e)
+                )
 
     @staticmethod
     def get_notification_hash(submission_id: str, user_id: str) -> str:
@@ -37,14 +44,11 @@ class RedditSearchWorker(PeriodicWorkerBase):
         for submission in self.praw_client.subreddit(watchable.subreddit).search(
             watchable.watch, sort="new"
         ):
-            submission_datetime = datetime.utcfromtimestamp(submission.created_utc)
-            if submission_datetime < watchable.created_at:
-                continue
-            notification = WatchableNotification(
-                watchable_id=watchable.id,
-                title=submission.title,
-                url=submission.shortlink,
+            notification = self.watchable_processor.get_notification_if_appropriate(
+                watchable, submission
             )
+            if notification is None:
+                continue
             self.mq_client.enqueue(
                 notification,
                 RedditSearchWorker.get_notification_hash(
