@@ -30,8 +30,8 @@ class WatchableRepository(IWatchableRepository, GenericMongoRepository):
     def _deserialize(self, raw_data: Dict[str, any]) -> Watchable:
         return Watchable(
             id=str(raw_data["_id"].as_uuid()),
-            provider_user_id=raw_data["provider_user_id"],
-            effective_chat_id=raw_data["effective_chat_id"],
+            provider_user_id=str(raw_data["provider_user_id"]),
+            effective_chat_id=str(raw_data["effective_chat_id"]),
             subreddit=raw_data["subreddit"],
             watch=raw_data["watch"],
             processor_type=WatchableProcessorType(raw_data["processor_type"]),

@@ -68,8 +68,8 @@ class BotHandler:
             processing_type = update.message.text.split(" ")[2]
             watch = " ".join(update.message.text.split(" ")[3:])
             self.watchable_service.add_watchable(
-                provider_user_id=update.message.from_user.id,
-                effective_chat_id=update.effective_chat.id,
+                provider_user_id=str(update.message.from_user.id),
+                effective_chat_id=str(update.effective_chat.id),
                 subreddit=subreddit,
                 processing_type=processing_type,
                 watch=watch,
