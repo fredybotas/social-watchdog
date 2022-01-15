@@ -1,4 +1,3 @@
-from libcore.types.watchable_notification import WatchableNotification
 from search_service import WatchableProcessor
 from libcore.types import Watchable, WatchableProcessorType
 import pytest

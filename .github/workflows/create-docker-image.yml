@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  build-packages:
+  build:
     strategy:
       fail-fast: false
       matrix:

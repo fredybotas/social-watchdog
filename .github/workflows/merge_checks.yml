@@ -1,0 +1,116 @@
+name: Merge checks
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-format:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.0]
+        poetry-version: [1.1.12]
+        os: [ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - run: |
+          poetry install
+          poetry run black --target-version py310 .
+  check-flake8:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.0]
+        poetry-version: [1.1.12]
+        os: [ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - run: |
+          poetry install
+          poetry run flake8
+  run-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.0]
+        poetry-version: [1.1.12]
+        os: [ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - run: |
+          poetry install
+          poetry run python -m spacy download en_core_web_sm
+          poetry run pytest services/telegram-bot
+          poetry run pytest services/search-service
+          poetry run pytest lib/libcore
+          poetry run pytest lib/liblog
+          poetry run pytest lib/libmq
+  build-packages:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.0]
+        poetry-version: [1.1.12]
+        os: [ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Build libcore
+        run: cd lib/libcore && poetry install --no-dev && poetry build
+      - name: Build liblog
+        run: cd lib/liblog && poetry install --no-dev && poetry build
+      - name: Build libmq
+        run: cd lib/libmq && poetry install --no-dev && poetry build
+      - name: Build telegram-bot
+        run: cd services/telegram-bot && poetry install --no-dev && poetry build
+      - name: Build search-service
+        run: cd services/search-service && poetry install --no-dev && poetry build
+      - name: Build package telegram-bot
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/${{ github.actor }}/telegram-bot:latest
+          file: services/telegram-bot/Dockerfile
+          load: true
+      - name: Build package search-service
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: ghcr.io/${{ github.actor }}/search-service:latest
+          file: services/search-service/Dockerfile
+          load: true

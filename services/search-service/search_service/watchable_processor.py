@@ -7,7 +7,9 @@ from .text_matchers import StrictMatcher, DefaultMatcher
 
 class WatchableProcessor:
     # TODO: Refactor matchers to be more generic
-    def __init__(self, strict_matcher: StrictMatcher, default_matcher: DefaultMatcher) -> None:
+    def __init__(
+        self, strict_matcher: StrictMatcher, default_matcher: DefaultMatcher
+    ) -> None:
         self.strict_matcher = strict_matcher
         self.default_matcher = default_matcher
 
@@ -17,7 +19,9 @@ class WatchableProcessor:
         submission_datetime = datetime.utcfromtimestamp(submission.created_utc)
         if submission_datetime < watchable.created_at:
             return None
-        if not self._should_deliver_submission(watchable, submission.title + " " + submission.selftext):
+        if not self._should_deliver_submission(
+            watchable, submission.title + " " + submission.selftext
+        ):
             return None
         return WatchableNotification(
             watchable_id=watchable.id,
