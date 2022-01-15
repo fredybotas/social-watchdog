@@ -35,7 +35,7 @@ class BotHandler:
     def _list_command(self, update: Update, context: CallbackContext):
         try:
             watchables = self.watchable_service.get_all_watchables_for_user(
-                update.effective_user.id
+                str(update.effective_user.id)
             )
             watchables = [
                 str((str(w.id), w.subreddit, w.processor_type.value, w.watch))
@@ -51,7 +51,7 @@ class BotHandler:
     def _remove_command(self, update: Update, context: CallbackContext):
         try:
             self.watchable_service.remove_watchable(
-                update.effective_user.id, update.message.text.split(" ")[1]
+                str(update.effective_user.id), update.message.text.split(" ")[1]
             )
             update.message.reply_text("Watchable sucessfully removed!")
         except NotFoundError:
