@@ -56,7 +56,7 @@ jobs:
           file: services/search-service/Dockerfile
           push: true
   deploy:
-    needs: build-packages
+    needs: build
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
