@@ -34,14 +34,14 @@ jobs:
         run: cd services/telegram-bot && poetry install --no-dev && poetry build
       - name: Build search-service
         run: cd services/search-service && poetry install --no-dev && poetry build
-      - name: Build package
+      - name: Build package telegram-bot
         uses: docker/build-push-action@v2
         with:
           context: .
           tags: ghcr.io/${{ github.actor }}/telegram-bot:latest
           file: services/telegram-bot/Dockerfile
           load: true
-      - name: Push to search-service package
+      - name: Build package search-service
         uses: docker/build-push-action@v2
         with:
           context: .
