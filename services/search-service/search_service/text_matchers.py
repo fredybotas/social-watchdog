@@ -1,5 +1,4 @@
 import spacy
-import math
 from libcore.types import Watchable
 
 
