@@ -24,6 +24,7 @@ period = 30 * 60  # in seconds
 
 
 async def main():
+    global reddit_W
     praw_client = asyncpraw.Reddit(
         client_id=os.getenv("REDDIT_CLIENT_ID"),
         client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
@@ -41,7 +42,13 @@ async def main():
     )
     lemmatizer = Lemmatizer()
     _ = RedditSearchWorker(
-        loop, period, praw_client, repository, mq_client, watchable_processor
+        loop,
+        period,
+        praw_client,
+        repository,
+        mq_client,
+        watchable_processor,
+        lemmatizer,
     )
     _ = TwitterSearchWorker(
         loop,
