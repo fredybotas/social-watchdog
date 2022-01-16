@@ -16,7 +16,7 @@ class StrictMatcher(Matcher):
         matcher = spacy.matcher.Matcher(self.nlp.vocab)
         matcher.add(
             "Matcher",
-            [[{"LEMMA": token} for token in watchable.watch.split(" ")]],
+            [[{"LEMMA": token.lemma_} for token in self.nlp(watchable.watch)]],
         )
         doc = self.nlp(doc_str)
         return len(matcher(doc)) > 0
@@ -25,13 +25,13 @@ class StrictMatcher(Matcher):
 class DefaultMatcher(Matcher):
     def match(self, watchable: Watchable, doc_str: str) -> bool:
         matches_count = 0
-        tokens_to_match = watchable.watch.split(" ")
-        threshold = math.ceil(len(tokens_to_match) / 2)
-        for token in tokens_to_match:
+        watchable_doc = self.nlp(watchable.watch)
+        threshold = len(watchable_doc)  # math.ceil(len(watchable_doc) / 2)
+        for token in watchable_doc:
             matcher = spacy.matcher.Matcher(self.nlp.vocab)
             matcher.add(
                 "Matcher",
-                [[{"LEMMA": token}]],
+                [[{"LEMMA": token.lemma_}]],
             )
             doc = self.nlp(doc_str)
             matches_count += 1 if len(matcher(doc)) > 0 else 0

@@ -1,5 +1,5 @@
 from search_service import WatchableProcessor
-from libcore.types import Watchable, WatchableProcessorType
+from libcore.types import Watchable, Submission, WatchableProcessorType
 import pytest
 from datetime import timedelta, datetime
 from unittest.mock import MagicMock
@@ -20,12 +20,13 @@ def watchable_stub():
 
 @pytest.fixture
 def submission_stub(request):
-    fake = MagicMock()
-    fake.submission_id = "aaa"
-    fake.created_utc = request.param
-    fake.title = "TestTitle"
-    fake.selftext = "TestText"
-    fake.shortlink = "link"
+    fake = Submission(
+        id="aaa",
+        url="link",
+        created_timestamp=request.param,
+        title="TestTitle",
+        text="TestText",
+    )
     return fake
 
 

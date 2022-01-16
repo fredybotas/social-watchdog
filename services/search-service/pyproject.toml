@@ -10,9 +10,10 @@ python-dotenv = "^0.19.2"
 libcore = ""
 libmq = ""
 liblog = ""
-praw = "^7.5.0"
 spacy = "^3.2.1"
 schedule = "^1.1.0"
+tweepy = "^4.4.0"
+asyncpraw = "^7.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

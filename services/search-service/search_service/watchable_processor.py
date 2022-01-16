@@ -2,6 +2,7 @@ from libcore.types import Watchable, WatchableNotification
 from typing import Optional
 from datetime import datetime
 from libcore.types import WatchableProcessorType
+from libcore.types import Submission
 from .text_matchers import StrictMatcher, DefaultMatcher
 
 
@@ -14,19 +15,19 @@ class WatchableProcessor:
         self.default_matcher = default_matcher
 
     def get_notification_if_appropriate(
-        self, watchable: Watchable, submission: any
+        self, watchable: Watchable, submission: Submission
     ) -> Optional[WatchableNotification]:
-        submission_datetime = datetime.utcfromtimestamp(submission.created_utc)
+        submission_datetime = datetime.utcfromtimestamp(submission.created_timestamp)
         if submission_datetime < watchable.created_at:
             return None
         if not self._should_deliver_submission(
-            watchable, submission.title + " " + submission.selftext
+            watchable, submission.title + " " + submission.text
         ):
             return None
         return WatchableNotification(
             watchable_id=watchable.id,
             title=submission.title,
-            url=submission.shortlink,
+            url=submission.url,
         )
 
     def _should_deliver_submission(self, watchable: Watchable, text_to_match: str):

@@ -11,7 +11,7 @@ def watchable_stub():
         provider_user_id="provid_u_id",
         effective_chat_id="eff_chat_id",
         subreddit="all",
-        watch="heart rate zone",
+        watch="heart rate zones",
         processor_type=WatchableProcessorType.DEFAULT,
         created_at=datetime.utcnow(),
     )
@@ -33,9 +33,10 @@ def test_strict_matcher_should_not_match(watchable_stub):
 
 def test_default_matcher_should_match(watchable_stub):
     sut = DefaultMatcher()
-    assert sut.match(watchable_stub, "Heart :D Rate test text")
+    assert sut.match(watchable_stub, "Heart :D Rate test Zone text")
 
 
 def test_default_matcher_should_not_match(watchable_stub):
     sut = DefaultMatcher()
     assert not sut.match(watchable_stub, "Heart test text.")
+    assert not sut.match(watchable_stub, "Heart test Rate text.")
