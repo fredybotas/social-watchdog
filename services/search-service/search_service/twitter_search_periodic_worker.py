@@ -35,7 +35,7 @@ class TwitterSearchWorker(PeriodicSearchWorker):
             return watchable.watch
         return " ".join(["({} OR {})".format(le, te) for le, te in zip(lemmas, terms)])
 
-    def _process_watchable(self, watchable: Watchable):
+    async def _process_watchable(self, watchable: Watchable) -> None:
         response = self.tweepy.search_recent_tweets(
             query=self._get_twitter_query(watchable),
             start_time=datetime.utcnow() - timedelta(hours=1),

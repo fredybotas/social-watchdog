@@ -28,7 +28,7 @@ class RedditSearchWorker(PeriodicSearchWorker):
         self.watchable_processor = watchable_processor
         self.lemmatizer = lemmatizer
 
-    async def _process_watchable(self, watchable: Watchable):
+    async def _process_watchable(self, watchable: Watchable) -> None:
         watchable_terms = " ".join(self.lemmatizer.lemmatize(watchable.watch))
         subreddit = await self.praw_client.subreddit(watchable.subreddit)
         async for response in subreddit.search(
