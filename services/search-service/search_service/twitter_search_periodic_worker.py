@@ -10,6 +10,8 @@ import tweepy
 
 logger = get_logger(__name__)
 
+NOT_RETWEET_QUERY = "-is:retweet"
+
 
 class TwitterSearchWorker(PeriodicSearchWorker):
     def __init__(
@@ -32,8 +34,11 @@ class TwitterSearchWorker(PeriodicSearchWorker):
         lemmas = self.lemmatizer.lemmatize(watchable.watch)
         terms = watchable.watch.split(" ")
         if len(lemmas) != len(terms):
-            return watchable.watch
-        return " ".join(["({} OR {})".format(le, te) for le, te in zip(lemmas, terms)])
+            return watchable.watch + " " + NOT_RETWEET_QUERY
+        return " ".join(
+            ["({} OR {})".format(le, te) for le, te in zip(lemmas, terms)]
+            + [NOT_RETWEET_QUERY]
+        )
 
     async def _process_watchable(self, watchable: Watchable) -> None:
         response = self.tweepy.search_recent_tweets(
