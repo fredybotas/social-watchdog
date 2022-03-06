@@ -51,9 +51,18 @@ class UniqueMessageQueueClient(Generic[T]):
                 element = pickle.loads(self.redis.brpop(self.queue_key)[1])
                 logger.info("Received new notification")
                 process_fn(element)
+                time.sleep(2)
             except redis.ConnectionError:
                 logger.error("Redis connection lost during receiving")
                 time.sleep(1)
+            except Exception:
+                logger.error("Internal error when processing notification in listen_loop. Gonna try once more")
+                time.sleep(1)
+                try:
+                    if element is not None:
+                        process_fn(element)
+                except Exception:
+                    logger.error("Repeated try to process notification failed")
 
     def stop(self):
         if self.listening is False:
