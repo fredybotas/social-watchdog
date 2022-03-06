@@ -30,6 +30,7 @@ class UniqueMessageQueueClient(Generic[T]):
         try:
             if self.redis.sismember(self.set_key, unique_identifier):
                 return
+            logger.info("Pushing new notification")
             pipeline = self.redis.pipeline(transaction=True)
             pipeline.lpush(self.queue_key, pickle.dumps(element))
             pipeline.sadd(self.set_key, unique_identifier)
@@ -48,6 +49,7 @@ class UniqueMessageQueueClient(Generic[T]):
         while self.listening is True:
             try:
                 element = pickle.loads(self.redis.brpop(self.queue_key)[1])
+                logger.info("Received new notification")
                 process_fn(element)
             except redis.ConnectionError:
                 logger.error("Redis connection lost during receiving")
