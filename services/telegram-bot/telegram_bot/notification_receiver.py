@@ -2,6 +2,9 @@ from libmq import UniqueMessageQueueClient
 from .bot import Bot
 from libcore.types import WatchableNotification
 from libcore.repositories import WatchableRepository
+from liblog import get_logger
+
+logger = get_logger(__name__)
 
 
 class NotificationReceiver:
@@ -19,6 +22,7 @@ class NotificationReceiver:
         self.mq_client.listen(self._process_notification)
 
     def _process_notification(self, notification: WatchableNotification):
+        logger.info(f"Processing notification: {notification}")
         watchable = self.watchable_repository.get_one({"id": notification.watchable_id})
         if watchable is not None:
             self.bot.send_message(
