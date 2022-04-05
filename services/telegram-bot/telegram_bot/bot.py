@@ -3,6 +3,7 @@ from telegram_bot.watchable_service import InvalidProcessingTypeError
 from liblog import get_logger
 from telegram.ext import Updater
 from telegram import Update
+from telegram.error import TelegramError
 from telegram.ext import CallbackContext, CommandHandler
 import os
 
@@ -89,8 +90,12 @@ class BotHandler:
     def run(self) -> None:
         self.updater.start_polling()
 
-    def send_message(self, to: str, text: str) -> None:
-        return self.updater.bot.send_message(to, text=text)
+    def send_message(self, to: str, text: str):
+        logger.info(f"Sending message to {to}: {text}")
+        try:
+            self.updater.bot.send_message(to, text=text)
+        except TelegramError as e:
+            logger.error(e)
 
 
 class Bot:
