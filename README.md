@@ -13,10 +13,14 @@ Those services uses MongoDB storage and they communicate through MQ (redis).
 
 ## Bot commands
 * /list - lists all watchables for user
-* /add {type} {query}
-  * type: strict/default
+* /add {network} {matching} {query}
+  * network:
+    * all
+    * reddit
+    * twitter
+  * matching: strict/default
     * default - loosely match lemmas of give search phrase (match them  in any other)
     * strict - strictly match lemmas sequence of given search phrase
-  * query: phrase you want to look for. Can be single keyword.
+  * query: phrase you want to look for. Can be a single keyword.
 * /remove {id} - removes Watchable for user
   * id: UUID that can be received from /list command
