@@ -52,14 +52,6 @@
         state: present
         key: "{{ ssh_output_pub.stdout }}"
 
-    - name: Display SSH key
-      command: cat /home/{{ create_user }}/.ssh/id_rsa_github | tr "\n" ""
-      register: ssh_output_private
-
-    - name: Print key to console
-      debug:
-        msg: "{{ssh_output_private.stdout}}"
-
     - name: Update apt
       apt: update_cache=yes
 
